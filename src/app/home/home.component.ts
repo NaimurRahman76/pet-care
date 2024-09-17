@@ -1,18 +1,17 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from '../../src/app/services/auth.service';
+import { AuthService } from "../services/auth.service";
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef, OnInit } from '@angular/core';
-import { HomeComponent } from "./home/home.component";
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, HomeComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  imports: [RouterOutlet, FormsModule],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
-export class AppComponent implements OnInit {
+export class HomeComponent implements OnInit {
   title = 'pet-care';
   isLoggedIn = false;
   username: string | null = '';

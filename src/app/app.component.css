@@ -1,0 +1,34 @@
+.top-section {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--gray-400);
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    margin-bottom: 1rem;
+  }
+  
+  .top-section p {
+    margin: 0;
+    color: var(--gray-900);
+  }
+  
+  .top-section a {
+    color: var(--bright-blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .top-section button {
+    background-color: var(--hot-red);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .top-section button:hover {
+    background-color: var(--orange-red);
+  }
+  
