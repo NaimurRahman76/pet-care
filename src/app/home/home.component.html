@@ -1,0 +1,22 @@
+
+<style>
+    
+  </style>
+  <div class="top-section">
+    @if (isLoggedIn) {
+      <p>Welcome, {{ username }}!</p>
+      <button (click)="logout()">Logout</button>
+    } @else {
+      <p>Please <a href="/login">Login</a> or <a href="/signup">Sign Up</a>.</p>
+    }
+  </div>
+  <main class="main">
+    <div class="content">
+      <div class="left-side">
+        <h1>Welcome to , {{ title }}</h1>
+        <p>Let's care out pet together</p>
+      </div>
+    </div>
+  </main>
+  
+  <router-outlet />
