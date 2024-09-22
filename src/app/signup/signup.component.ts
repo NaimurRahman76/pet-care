@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service'; 
 
 @Component({
   selector: 'app-signup',
@@ -11,18 +12,38 @@ import { FormsModule } from '@angular/forms';
 export class SignupComponent {
   showPassword = false;
   showConfirmPassword = false;
-  isSignupClosed = true; 
+  isSignupClosed = false; 
+  successMessage: string | null = null;
+  constructor(private authService: AuthService) {}
+
   onSubmit(form: any) {
     if (form.valid) {
-      const { fullName, email, gender, password, confirmPassword } = form.value;
+      const { userName, email, gender, password, confirmPassword } = form.value;
       
       if (password !== confirmPassword) {
         alert('Passwords do not match');
         return;
       }
-
-      // Implement signup logic, e.g., call backend API to register the user
-      console.log('Form Data:', { fullName, email, gender, password });
+      this.authService.signup(userName, email, gender, password).subscribe({
+        next: response => {
+          console.log('Signup successful:', response);
+          this.successMessage = 'Signup successful! You can now log in.';
+        },
+        error: err => {
+          console.error('Signup error:', err);
+          
+          let errorMessage: string;
+      
+          if (err.error && err.error.message) {
+              errorMessage = err.error.message;
+          } else {
+              errorMessage = 'Signup failed. Please try again.';
+          }
+      
+          alert(errorMessage);
+      }
+      });
+      
     }
   }
 

@@ -2,7 +2,6 @@ import { Component ,NgModule} from '@angular/core';
 import { Router } from '@angular/router'; 
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -11,17 +10,23 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  username = '';
+  email = '';
   password = '';
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
   onLogin(): void {
-    if (this.authService.login(this.username, this.password)) {
-      this.errorMessage = '';
-      this.router.navigate(['/']);
-    } else {
-      this.errorMessage = 'Invalid username or password';
-    }
+    this.authService.login(this.email, this.password).subscribe({
+      next: response => {
+        console.log('Login response:', response); 
+        this.authService.handleLoginResponse(response);
+        this.errorMessage = '';
+        this.router.navigate(['/']);
+      },
+      error: err => {
+        console.error('Login error:', err); 
+        this.errorMessage = 'Invalid email or password';
+      }
+    });
   }
 }

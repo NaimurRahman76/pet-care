@@ -1,15 +1,15 @@
 <h2 class="login-title">Login</h2>
 <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
   <div class="form-group">
-    <label for="username" class="form-label">Username:</label>
+    <label for="email" class="form-label">Email:</label>
     <input
-      id="username"
+      id="email"
       type="text"
       class="form-control"
-      [(ngModel)]="username"
-      name="username"
+      [(ngModel)]="email"
+      name="email"
       required
-      placeholder="Enter your username"
+      placeholder="Enter your email"
     >
   </div>
 
@@ -37,5 +37,9 @@
       {{ errorMessage }}
     </div>
   }
-  
 </form>
+<div>
+  <a href="/home">
+    Goto home
+  </a>
+</div>
