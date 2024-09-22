@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef, OnInit } from '@angular/core';
 import { HomeComponent } from "./home/home.component";
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
