@@ -1,0 +1,20 @@
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f8f8; 
+}
+
+.logo img {
+    height: 50px; 
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+}
+
+.user-section p {
+    margin-right: 15px; 
+}

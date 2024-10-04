@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   signup(userName: string, email: string, gender: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/signup`, { userName, email, gender, password }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/signup`, { userName, email, gender, password }, { withCredentials: true }).pipe(
       catchError(error => {
         console.error('Signup failed', error);
         throw error; 
@@ -38,7 +38,15 @@ export class AuthService {
       })
     );
   }
-
+  refreshAccessToken() {
+    return this.http.post('https://localhost:7088/api/auth/refresh-token', { withCredentials: true })
+      .pipe(
+        tap((response: any) => {
+          // The new access token is automatically stored in HttpOnly cookie by the server
+          console.log('Access token refreshed successfully');
+        })
+      );
+  }
   handleLoginResponse(response: any): void {
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('email', response.email); 

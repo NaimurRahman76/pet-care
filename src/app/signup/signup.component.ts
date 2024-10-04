@@ -18,13 +18,13 @@ export class SignupComponent {
 
   onSubmit(form: any) {
     if (form.valid) {
-      const { userName, email, gender, password, confirmPassword } = form.value;
+      const { fullName, email, gender, password, confirmPassword } = form.value;
       
       if (password !== confirmPassword) {
         alert('Passwords do not match');
         return;
       }
-      this.authService.signup(userName, email, gender, password).subscribe({
+      this.authService.signup(fullName, email, gender, password).subscribe({
         next: response => {
           console.log('Signup successful:', response);
           this.successMessage = 'Signup successful! You can now log in.';

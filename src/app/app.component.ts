@@ -1,15 +1,23 @@
-import { Component, NgModule } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../src/app/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef, OnInit } from '@angular/core';
 import { HomeComponent } from "./home/home.component";
+import { NavbarComponent } from './navbar/navbar.component';
+import { HTTP_INTERCEPTORS} from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, HomeComponent],
+  imports: [RouterOutlet, FormsModule, HomeComponent,NavbarComponent ],
+  providers:[{
+    provide:HTTP_INTERCEPTORS,
+    useClass:AuthInterceptor,
+    multi:true
+  }],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

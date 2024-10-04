@@ -1,16 +1,32 @@
 
-<style>
-    
-  </style>
-  <div class="top-section">
-    @if (isLoggedIn) {
-      <p>Welcome, {{ username }}!</p>
-      <button (click)="logout()">Logout</button>
-    } @else {
-      <p>Please <a href="/login">Login</a> or <a href="/signup">Sign Up</a>.</p>
-    }
-  </div>
   <main class="main">
+    @if(isLoggedIn){
+      <div>
+        <form (ngSubmit)="onSubmit()" [formGroup]="postForm">
+          <div class="form-group">
+            <label for="postBody">What's on your mind?</label>
+            <textarea id="postBody" formControlName="body" placeholder="Share something..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="anonymousCheck">
+              <input type="checkbox" id="anonymousCheck" formControlName="isAnonymous" (change)="toggleAnonymous()"> Post anonymously
+            </label>
+          </div>
+          @if(postForm.get('isAnonymous')!.value){
+            <div class="form-group">
+              <label for="alias">Choose a display name</label>
+              <input type="text" id="alias" formControlName="alias" placeholder="Anonymous name (optional)">
+            </div>
+          }
+          
+          <div class="form-group">
+            <label for="postImage">Upload a picture</label>
+            <input type="file" id="postImage" (change)="onFileChange($event)">
+          </div>
+          <button type="submit" [disabled]="postForm.invalid">Post</button>
+        </form>
+      </div>
+    }
     <div class="content">
       <div class="left-side">
         <h1>Welcome to , {{ title }}</h1>
