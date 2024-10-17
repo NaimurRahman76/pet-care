@@ -36,11 +36,10 @@ export class HomeComponent implements OnInit {
   onSubmit() {
     const formData = new FormData();
     formData.append('body', this.postForm.get('body')!.value);
-    formData.append('isAnonymous', this.postForm.get('isAnonymous')!.value ? 'true' : 'false');
-    formData.append('alias', this.postForm.get('alias')!.value || 'Anonymous');
+    formData.append('Username', this.postForm.get('alias')!.value || 'Anonymous');
 
     if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
+      formData.append('Images', this.selectedFile);
     }
 
     this.http.post(`${this.postApiUrl}/CreatePost`, formData,{withCredentials:true}).subscribe(response => {
