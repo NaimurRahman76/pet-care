@@ -59,16 +59,20 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isAuthenticated().subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
-      this.cdr.detectChanges(); 
-    });
-
-    this.authService.getUsername().subscribe(username => {
-      this.username = username;
+      if (isLoggedIn) {
+        this.authService.getUsername().subscribe(username => {
+          this.username = username;
+          this.cdr.detectChanges(); 
+        });
+      } else {
+        this.username = null; 
+      }
       this.cdr.detectChanges(); 
     });
   }
 
   logout(): void {
     this.authService.logout();
+    this.isLoggedIn = false;
   }
 }

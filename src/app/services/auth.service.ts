@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +70,15 @@ export class AuthService {
   }
 
   isAuthenticated(): Observable<boolean> {
-    return this.isAuthenticatedStatus.asObservable();
+    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/IsAuthenticated`, { withCredentials: true })
+    .pipe(
+      map(response => response.isAuthenticated),
+      catchError(error => {
+        // If the request fails, treat it as not authenticated
+        console.error('Authentication check failed:', error);
+        return of(false);
+      })
+    );
   }
 
   getEmail(): Observable<string | null> {
