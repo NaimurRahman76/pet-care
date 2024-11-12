@@ -26,13 +26,42 @@
           <button type="submit" [disabled]="postForm.invalid">Post</button>
         </form>
       </div>
-    }
-    <div class="content">
-      <div class="left-side">
-        <h1>Welcome to , {{ title }}</h1>
-        <p>Let's care out pet together</p>
-      </div>
+       <!-- List of posts -->
+    <div class="post-list">
+      @for(post of posts;track post){
+        <div class="post-item">
+          <h3>{{ post.username || 'Anonymous' }}</h3>
+          <p>{{ post.body }}</p>
+          <p>Posted on: {{ post.createdAt }}</p>
+          @if(post.imageUrls && post.imageUrls.length>0){
+            <div class="post-images">
+              @for(imageUrl of post.imageUrls;track imageUrl){
+                <img [src]="'data:image/jpeg;base64,' + imageUrl" alt="Post Image" class="post-image">
+              }
+            </div>
+          }
+          <hr />
+        </div>
+      }
+      
+      <!-- Infinite Scroll Trigger -->
+       @if(hasMorePosts){
+        <div class="load-more" (window:scroll)="onScroll()">
+          <p>Loading more posts...</p>
+        </div>
+       }
+      
     </div>
+    }
+    @else{
+      <div class="content">
+        <div class="left-side">
+          <h1>Welcome to , {{ title }}</h1>
+          <p>Let's care out pet together</p>
+        </div>
+      </div>
+    }
+    
   </main>
   
   <router-outlet />

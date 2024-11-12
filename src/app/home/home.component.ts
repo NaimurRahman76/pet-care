@@ -1,15 +1,17 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, HostListener, NgModule } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from "../services/auth.service";
 import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ChangeDetectorRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { PostResponseDTO } from "../models/postResponseDTO"
+import { PostDetailsDTO } from "../models/PostDetailsDTO"
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet, FormsModule,ReactiveFormsModule ],
+  imports: [RouterOutlet, FormsModule,ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -19,6 +21,10 @@ export class HomeComponent implements OnInit {
   username: string | null = '';
   postForm: FormGroup;
   selectedFile: File | null = null;
+  posts: PostDetailsDTO[] = [];
+  hasMorePosts: boolean = true;
+  private pageSize = 10;
+  isLoading: boolean = false; 
   private postApiUrl = 'https://localhost:7088/api/post'; 
   constructor(private authService: AuthService, private cdr: ChangeDetectorRef,private fb: FormBuilder, private http: HttpClient) 
   {
@@ -69,6 +75,40 @@ export class HomeComponent implements OnInit {
       }
       this.cdr.detectChanges(); 
     });
+    this.loadPosts(); 
+  }
+
+  loadPosts(reset: boolean = false): void {
+    if (reset) {
+      this.posts = [];
+    }
+
+    const params = {
+      offset: this.posts.length.toString(),
+      pageSize: this.pageSize.toString()
+    };
+
+    this.http.get<PostResponseDTO>(`${this.postApiUrl}/GetPosts`, { params ,withCredentials:true})
+    .subscribe(response => {
+      this.posts = [...this.posts, ...response.posts];
+      this.hasMorePosts = response.hasMore; 
+      this.isLoading = false; 
+    }, error => {
+      console.error('Error loading posts:', error);
+      this.isLoading = true; 
+    });
+
+  }
+
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const threshold = document.body.offsetHeight - 200;
+
+    if (scrollPosition >= threshold && this.hasMorePosts && !this.isLoading) {
+      this.isLoading = true; 
+      this.loadPosts();
+    }
   }
 
   logout(): void {
